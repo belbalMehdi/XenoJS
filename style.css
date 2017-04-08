@@ -1,0 +1,70 @@
+@font-face{
+	font-family: 'reef';
+	src : url('images/reef.otf');
+}
+body{
+	width : 100vw;
+	height : 100vh;
+}
+#page{
+	width: 100%;
+	height: 100%;
+	background: url('images/blackBG.jpg') no-repeat;
+	padding: 20px;
+	color: white;
+}
+#menu{
+	display: flex;
+	color : white;
+	list-style: none;
+	justify-content: space-between;
+}
+ul{
+	padding : 0;
+}
+.visible-xs ul{
+	padding: 10px;
+}
+#menu li a{
+	color : rgba(255,255,255,0.4);
+	text-decoration: none;
+	font-family: 'reef';
+	font-size: 1.5em;
+}
+
+#menu li a:hover{
+	color : rgba(255,255,255,0.8);
+	text-decoration: none;
+}
+#fen{
+	width: 40vw;
+	height: 20vh;
+	background-color : rgba(155,155,155,0.1);
+	border : 2px inset gray;
+	padding: 10px;
+	display : none;
+	font-family: "reef";
+	font-size: 1.2em;
+	color : white;
+}
+#menu-xs{
+	display: none;
+	flex-direction: column;
+	color : white;
+	list-style: none;
+	justify-content: space-between;
+	background-color : rgba(155,155,155,0.1);
+	border : 2px inset gray;
+}
+
+#menu-xs li a{
+	color : rgba(255,255,255,0.4);
+	text-decoration: none;
+	font-family: 'reef';
+	font-size: 1.2em;
+}
+
+#menu-xs li a:hover{
+	color : rgba(255,255,255,0.8);
+	text-decoration: none;
+}
