@@ -6,7 +6,6 @@ module.exports = (function(window){
 	var $target = {};
 	var handler = {
 		set : function(target,prop,value){
-			console.log(prop+' : '+value);
 			target[prop] = value;
 			bindToDom(prop,value);
 			return Reflect.get(target,prop,value);
@@ -16,7 +15,6 @@ module.exports = (function(window){
 	var $scope = new Proxy($target,handler);
 	refreshBind = function(){
 		for(i in $target){
-			console.log($target);
 			bindToDom(i,$target[i]);
 		}
 	};
