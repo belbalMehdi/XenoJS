@@ -1,5 +1,6 @@
 module.exports = (function(){
 	var router = require('./router');
+	var $http = require('./xhr');
 	$configList = {};
 	$ctrlList = {};
 	$serviceList = {};
@@ -10,11 +11,16 @@ module.exports = (function(){
 	}
 	controller = function(ctrlName, ctrlFct){
 		$ctrlList[ctrlName] = ctrlFct;
-		ctrlFct(router,router.$scope);
+		console.log($serviceList['appService']);
+		ctrlFct(router,router.$scope,$serviceList['appService']);
 		return this;
 	}
 	service = function(serviceName, serviceFct){
-		$serviceList[serviceName] = serviceFct();
+		console.log(serviceName);
+		$serviceList[serviceName] = serviceFct($http);
+
+				console.log(serviceFct($http));
+
 		return this;
 	}
 	return{

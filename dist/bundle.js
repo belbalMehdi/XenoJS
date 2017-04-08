@@ -12,27 +12,24 @@ app.config('routing',function($router) {
 		}).defaultState('home');
 	});
 
-
-app.controller('appController',function($router,$scope){
-	$('button')[0].addEventListener('click', function(){
-		$scope.name = 'wtf';
-		$router.go('home');
-	});
-	$('button')[1].addEventListener('click', function(){
-		$router.go('info');
-	});
-}).controller('infoController',function($router,$scope){
-	$('button')[0].addEventListener('click', function(){
-		$scope.name = 'infoPower';
-		$router.go('home');
-	});
-	$('button')[1].addEventListener('click', function(){
-		$router.go('info');
-	});
+app.service('appService',function($http){
+	return
+	{
+		getName : $http.get('user.json',function(data){
+				console.log(data.name);
+					return data.name;
+					})
+	}
 });
 
-app.service('appService',function($http){
-
+app.controller('appController',function($router,$scope,appService){
+	$scope.name = appService.getName;
+	$('button')[0].addEventListener('click', function(){
+		$router.go('home');
+	});
+	$('button')[1].addEventListener('click', function(){
+		$router.go('info');
+	});
 });
 },{"./src/xeno":4}],2:[function(require,module,exports){
 module.exports = (function(window){
@@ -137,6 +134,7 @@ module.exports = (function(window){
 },{"./bind":2}],4:[function(require,module,exports){
 module.exports = (function(){
 	var router = require('./router');
+	var $http = require('./xhr');
 	$configList = {};
 	$ctrlList = {};
 	$serviceList = {};
@@ -147,11 +145,16 @@ module.exports = (function(){
 	}
 	controller = function(ctrlName, ctrlFct){
 		$ctrlList[ctrlName] = ctrlFct;
-		ctrlFct(router,router.$scope);
+		console.log($serviceList['appService']);
+		ctrlFct(router,router.$scope,$serviceList['appService']);
 		return this;
 	}
 	service = function(serviceName, serviceFct){
-		$serviceList[serviceName] = serviceFct();
+		console.log(serviceName);
+		$serviceList[serviceName] = serviceFct($http);
+
+				console.log(serviceFct($http));
+
 		return this;
 	}
 	return{
@@ -160,4 +163,50 @@ module.exports = (function(){
 		'service' : service,
 	}
 })();
-},{"./router":3}]},{},[1]);
+},{"./router":3,"./xhr":5}],5:[function(require,module,exports){
+// Ajax Methods
+module.exports = (function(){
+	$get = function(url,callback,errorCallback=function(){}){
+		var ajax = new XMLHttpRequest();
+		ajax.open("get",url,true);
+		ajax.addEventListener("load", function(){callback(JSON.parse(ajax.responseText))});
+		ajax.addEventListener("error", function(){errorCallback(ajax.status)});
+		ajax.send(null);
+	}
+
+	$post = function(url,data,callback,errorCallback=function(){}){
+		var ajax = new XMLHttpRequest();
+		ajax.open("post",url,true);
+		ajax.setRequestHeader("Content-Type", "application/json");
+		ajax.addEventListener("load", function(){callback(JSON.parse(ajax.responseText))});
+		ajax.addEventListener("error", function(){errorCallback(ajax.status)});
+		ajax.send(data);
+	}
+
+	$put = function(url,data,callback,errorCallback=function(){}){
+		var ajax = new XMLHttpRequest();
+		ajax.open("put",url,true);
+		ajax.addEventListener("load", function(){callback(JSON.parse(ajax.responseText))});
+		ajax.addEventListener("error", function(){errorCallback(ajax.status)});
+		ajax.setRequestHeader("Content-Type", "application/json");
+		ajax.send(data);
+	}
+
+	$delete = function(url,callback,errorCallback=function(){}){
+		var ajax = new XMLHttpRequest();
+		ajax.open("delete",url,true);
+		ajax.addEventListener("load", function(){callback(JSON.parse(ajax.responseText))});
+		ajax.addEventListener("error", function(){errorCallback(ajax.status)});
+		ajax.setRequestHeader("Content-Type", "application/json");
+		ajax.send(null);
+	}
+
+	return{
+		'get' : $get,
+		'post': $post,
+		'put' : $put,
+		'delete' : $delete
+	}
+})();
+
+},{}]},{},[1]);

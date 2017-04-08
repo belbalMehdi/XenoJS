@@ -11,25 +11,22 @@ app.config('routing',function($router) {
 		}).defaultState('home');
 	});
 
-
-app.controller('appController',function($router,$scope){
-	$('button')[0].addEventListener('click', function(){
-		$scope.name = 'wtf';
-		$router.go('home');
-	});
-	$('button')[1].addEventListener('click', function(){
-		$router.go('info');
-	});
-}).controller('infoController',function($router,$scope){
-	$('button')[0].addEventListener('click', function(){
-		$scope.name = 'infoPower';
-		$router.go('home');
-	});
-	$('button')[1].addEventListener('click', function(){
-		$router.go('info');
-	});
+app.service('appService',function($http){
+	return
+	{
+		getName : $http.get('user.json',function(data){
+				console.log(data.name);
+					return data.name;
+					})
+	}
 });
 
-app.service('appService',function($http){
-
+app.controller('appController',function($router,$scope,appService){
+	$scope.name = appService.getName;
+	$('button')[0].addEventListener('click', function(){
+		$router.go('home');
+	});
+	$('button')[1].addEventListener('click', function(){
+		$router.go('info');
+	});
 });
